@@ -27,6 +27,12 @@ public class ServerGameSocket implements Runnable {
                     gameController.setPlayerDirection(playerIndex,
                             clientMessage.getDirection());
                 }
+                if (clientMessage.hasStop) {
+                    gameController.pause(playerIndex);
+                }
+                if (clientMessage.hasMessage) {
+                    gameController.sendMessage(playerIndex,clientMessage.getMessage());
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

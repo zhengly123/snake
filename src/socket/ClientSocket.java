@@ -24,10 +24,12 @@ public class ClientSocket implements Runnable{
     private ObjectOutputStream oos=null;
     private ObjectInputStream ois=null;
     private ClientLogin loginWindow;
+    private GameWindow gameWindow;
     /**
      * 0 is NotConnected, 1 is connected, 2 is ready, 3 is playing
      */
     private int clientStatus;
+    String[] usernames;
     int room;
 
 
@@ -101,16 +103,19 @@ public class ClientSocket implements Runnable{
         }
     }
 
+    /**
+     * 接受初次信息，建立地图和其余数据。然后不断接受新的数据。
+     */
     @Override
     public void run() {
         try {
             Object object= null;
             object = ois.readObject();
             ServerMessage serverMessage=(ServerMessage)object;
-            assert serverMessage.hasInit;
+            assert (serverMessage.hasInit);
             logger.info("Receive init game information");
             //TODO: start a game logic
-            showGameWindow();
+            showGameWindow(serverMessage.getMapConfig(),this.usernames=serverMessage.getUsernames());
             //init do not have chess
 //            serverMessage.getChess().printMap();
             System.out.println("----------------------");
@@ -127,9 +132,21 @@ public class ClientSocket implements Runnable{
                 logger.info("recv server message");
                 serverMessage.print();
                 if (serverMessage.hasChess) {
+                    gameWindow.paintChess(serverMessage.getChess());
+                    gameWindow.updateUserList(serverMessage.getChess());
+                    gameWindow.setStatusText("Running");
                     System.out.printf("-------Round %d-------",serverMessage.round);
                     serverMessage.getChess().printMap();
                     System.out.println("----------------------");
+                }
+
+                if (serverMessage.hasPause) {
+                    pause();
+                }
+
+                if (serverMessage.hasMessage) {
+                    gameWindow.addChatMessage(serverMessage.getMessageFrom(),
+                            serverMessage.getMessage());
                 }
                 //TODO:处理其余的消息
             } catch (IOException e) {
@@ -137,8 +154,11 @@ public class ClientSocket implements Runnable{
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
         }
+    }
+
+    private void pause() {
+        gameWindow.setStatusText("Pause");
     }
 
     public void sendMove(int direction) {
@@ -153,13 +173,39 @@ public class ClientSocket implements Runnable{
         }
     }
 
-    private void showGameWindow() {
+    private void showGameWindow(MapConfig mapConfig,String[] usernames) {
         JFrame frame = new JFrame("Snake game window");
-        frame.setContentPane(new GameWindow(this).cp);
+        frame.setContentPane((gameWindow=new GameWindow(mapConfig,this,frame,usernames)).cp);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addKeyListener(new controller.KeyController(this));
         frame.setSize(700, 600);
 //        frame.setResizable(false);
         frame.setVisible(true);
+        frame.requestFocus();
+    }
+
+
+    public void sendPause() {
+        ClientMessage clientMessage=new ClientMessage();
+        clientMessage.setStop();
+        try {
+            oos.writeObject(clientMessage);
+            logger.info("Send stop");
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.warning("Fail to Send stop");
+        }
+    }
+
+    public void sendMessage(String msg) {
+        ClientMessage clientMessage=new ClientMessage();
+        clientMessage.setMessage(msg);
+        try {
+            oos.writeObject(clientMessage);
+            logger.info("Send msg");
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.warning("Fail to Send msg");
+        }
     }
 }

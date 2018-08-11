@@ -1,15 +1,18 @@
 package controller;
 
+import Window.GameWindow;
 import config.MapConfig;
 import config.Result;
 import config.ServerMessage;
 import entity.Chess;
 import socket.ServerGameSocket;
+import socket.ServerPeerSocket;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -19,6 +22,7 @@ enum GameStatus{STOPPED,RUNNING, PAUSE,OFFLINE};
 public class GameController extends TimerTask {
 //    private boolean isRunning=false;
     GameStatus status;
+    int pauseFrom;
 //    MapConfig mapConfig;
     private Chess chess;
     private int nPlayer;
@@ -40,28 +44,35 @@ public class GameController extends TimerTask {
     private int round=0, nLosePlayer =0;
     Thread[] gameThread;
 
+    public MapConfig getMapConfig() {
+        return chess.getMapConfig();
+    }
+
     public void setPlayerDirection(Integer c, Integer direction) {
         playerDirection[c]=direction;
         logger.info("Player "+c+" " +userNames[c]+" direction "+direction);
     }
 
     public GameController(MapConfig mapConfig) {
-        this(new Chess(mapConfig));
+        this(new Chess(mapConfig),mapConfig);
     }
 
-    public synchronized void addUser(String userName,Socket socket,ObjectOutputStream oos,ObjectInputStream ois) {
+    public synchronized void addUser(String userName, Socket socket, ObjectOutputStream oos,
+                                     ObjectInputStream ois, ServerPeerSocket serverPeerSocket) {
         userNames[nAddedPlayer]=userName;
         sockets[nAddedPlayer]=socket;
         objectOutputStreams[nAddedPlayer]=oos;
         objectInputStreams[nAddedPlayer]=ois;
         nAddedPlayer++;
         logger.info("user "+userName+" added to the game. #currrent player "+nAddedPlayer);
+        //必须先发送
+        serverPeerSocket.sendRoomInfo();
         if (nAddedPlayer == nPlayer) {
             start();
         }
     }
 
-    private GameController(Chess chess) {
+    private GameController(Chess chess, MapConfig mapConfig) {
         this.chess = chess;
         nPlayer=chess.getMapConfig().nPlayer;
         playerDirection=new int[nPlayer];
@@ -78,6 +89,9 @@ public class GameController extends TimerTask {
         objectInputStreams = new ObjectInputStream[nPlayer];
         gameThread=new Thread[nPlayer];
         logger=Logger.getLogger("GameController");
+
+        speed=mapConfig.getSpeed();
+        logger.info("Start a new room, speed="+speed);
     }
 
     /**
@@ -90,11 +104,12 @@ public class GameController extends TimerTask {
         clock =speed;
         ServerMessage serverMessage=new ServerMessage();
 //        serverMessage.setInit();
-        serverMessage.setInit(chess.getMapConfig());
+        serverMessage.setInit(chess.getMapConfig(),userNames);
         serverMessage.setChess(chess,round);
         for (Integer i=0;i<nPlayer;++i) {
             ObjectOutputStream oos = objectOutputStreams[i];
             try {
+                oos.writeObject(serverMessage);
                 oos.writeObject(serverMessage);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -114,10 +129,10 @@ public class GameController extends TimerTask {
         //TODO: test this game start
     }
 
-    public void pause() {
-//        isRunning=false;
-        status=GameStatus.PAUSE;
-    }
+//    public void pause() {
+////        isRunning=false;
+//        status=GameStatus.PAUSE;
+//    }
 
     public void stop() {
 //        isRunning=false;
@@ -171,6 +186,31 @@ public class GameController extends TimerTask {
 //        serverMessage.setEnd(, Result.LOSE);
     }
 
+    public synchronized void pause(int index) {
+        if (status == GameStatus.RUNNING) {
+            //成功暂停
+            status=GameStatus.PAUSE;
+            pauseFrom=index;
+
+            ServerMessage serverMessage=new ServerMessage();
+            serverMessage.setPause();
+            sendServerMsgToAll(serverMessage);
+        } else if (status == GameStatus.PAUSE && pauseFrom == index) {
+            status=GameStatus.RUNNING;
+        }
+    }
+
+    private void sendServerMsgToAll(ServerMessage serverMessage) {
+        for (int i = 0; i < nPlayer; ++i) {
+            try {
+                objectOutputStreams[i].writeObject(serverMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
+                logger.info("Fail to send msg to all");
+            }
+        }
+    }
+
     private void endGame() {
         ServerMessage serverMessage=new ServerMessage();
         //TODO: add game end operation
@@ -186,6 +226,14 @@ public class GameController extends TimerTask {
                 logger.warning("Fail to send end game msg");
             }
         }
+        
+    }
+
+    public void sendMessage(int index,String msg) {
+        ServerMessage serverMessage=new ServerMessage();
+        serverMessage.setMessage(userNames[index],msg);
+        sendServerMsgToAll(serverMessage);
+        logger.info("Sent msg to all");
     }
 }
 

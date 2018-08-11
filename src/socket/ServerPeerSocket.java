@@ -15,6 +15,7 @@ public class ServerPeerSocket implements Runnable{
     int room;
     Logger logger=Logger.getLogger("ServerPeerSocket");
     ServerMainController serverMainController;
+    ObjectOutputStream oos;
 
     public ServerPeerSocket(Socket socket, ServerMainController serverMainController) {
         this.socket = socket;
@@ -25,7 +26,6 @@ public class ServerPeerSocket implements Runnable{
     public void run() {
         logger.info("Start to run");
         InputStream inputStream= null;
-        ObjectOutputStream oos;
         ObjectInputStream ois;
         ClientMessage clientMessage=null;
         try {
@@ -59,9 +59,10 @@ public class ServerPeerSocket implements Runnable{
         }
         if (clientMessage.hasNewGame) {
             room=serverMainController.createNewGame(socket,oos,ois,clientMessage.getMapConfig(),clientMessage.getUsername(),
-                    clientMessage.getGameSpeed());
+                    clientMessage.getGameSpeed(),this);
         } else if (clientMessage.hasJoinGame) {
-            serverMainController.joinGame(socket,oos,ois,clientMessage.getRoom(),clientMessage.getUsername());
+            serverMainController.joinGame(socket,oos,ois,clientMessage.getRoom(),
+                    clientMessage.getUsername(),this);
         }
         else
         {
@@ -69,6 +70,13 @@ public class ServerPeerSocket implements Runnable{
             return;
         }
         //send room number to client.
+//        serverMessage.setInit(serverMainController.getGameControllerHashMap().get(room).getMapConfig(),
+//                serverMessage.getUsernames());
+//        serverMainController.getGameControllerHashMap().get(room).testFullPlayer();
+    }
+
+    public void sendRoomInfo() {
+        //最后一个人，game controller发送的信息会先到达。所以gc发送两次，覆盖掉这个信息
         ServerMessage serverMessage=new ServerMessage();
         serverMessage.setRoom(room);
         try {

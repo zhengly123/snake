@@ -2,21 +2,20 @@ package config;
 
 import entity.Chess;
 import entity.Point;
-import entity.Snake;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class ServerMessage implements Serializable{
-    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions;
+    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions, hasPause;
     MapConfig mapConfig;
     Chess chess;
 
-    HashMap<String,String> message;
+    String message,messageFrom;
 
     Point[] collisions;
+    String[] usernames;
     Result result;
     public int round;
 
@@ -29,15 +28,29 @@ public class ServerMessage implements Serializable{
         this.room = room;
     }
 
-    int room;
-
-    public void setInit(MapConfig mapConfig) {
-        hasInit=true;
-        this.mapConfig = mapConfig;
+    public String getMessageFrom() {
+        return messageFrom;
     }
 
-    public void setMessage(HashMap<String, String> message) {
+    int room;
+
+    public void setInit(MapConfig mapConfig,String[] usernames) {
+        hasInit=true;
+        this.mapConfig = mapConfig;
+        this.usernames=usernames;
+    }
+
+    public String[] getUsernames() {
+        return usernames;
+    }
+
+    public void setPause() {
+        hasPause =true;
+    }
+
+    public void setMessage(String username,String message) {
         hasMessage=true;
+        messageFrom=username;
         this.message = message;
     }
 
@@ -56,7 +69,7 @@ public class ServerMessage implements Serializable{
         return mapConfig;
     }
 
-    public HashMap<String, String> getMessage() {
+    public String getMessage() {
         return message;
     }
 

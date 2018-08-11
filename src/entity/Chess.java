@@ -18,14 +18,38 @@ public class Chess implements Serializable {
     private MapConfig mapConfig;
     private ArrayList<Point> walls;
 
+    public ArrayList<Point> getWalls() {
+        return walls;
+    }
+
+    public ArrayList<Snake> getSnakes() {
+        return snakes;
+    }
+
+    public ArrayList<Point> getHoles() {
+        return holes;
+    }
+
+    public ArrayList<Point> getEggs() {
+        return eggs;
+    }
+
     public Snake getSnakes(int i) {
         return snakes.get(i);
+    }
+
+    public int[] getLives() {
+        return lives;
+    }
+
+    public int[] getPoints() {
+        return points;
     }
 
     private ArrayList<Snake> snakes;
     private ArrayList<Point> holes;
     private ArrayList<Point> eggs;
-    private int[] lives;
+    private int[] lives,points;
 //    boolean[] holeStatus;
     //TODO:add loser log
 
@@ -36,6 +60,7 @@ public class Chess implements Serializable {
         holes=new ArrayList<>();
         eggs=new ArrayList<>();
         lives=new int[mapConfig.nPlayer];
+        points=new int[mapConfig.nPlayer];
         for (int i = 0; i < mapConfig.nPlayer; ++i) {
             lives[i]=mapConfig.getnLives()-1;
         }
@@ -245,9 +270,16 @@ public class Chess implements Serializable {
         }
         for (int i=0;i<getMapConfig().nPlayer;++i)
             snakes.get(i).print(i);
+
         System.out.println("Lives array");
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             System.out.printf("%2d ",lives[i]);
+        }
+        System.out.println("");
+
+        System.out.println("Points array");
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            System.out.printf("%2d ",points[i]);
         }
         System.out.println("");
     }
@@ -333,6 +365,10 @@ public class Chess implements Serializable {
     public boolean[] move(int[] direction) {
         //move all snake but not modify chess
         Set<Integer> eatenEggs=new TreeSet<>();
+        int[] oldLen=new int[getMapConfig().nPlayer];
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            oldLen[i]=snakes.get(i).getLen();
+        }
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             if (lives[i]==0)
                 continue;
@@ -343,6 +379,13 @@ public class Chess implements Serializable {
         boolean[] lose;
         int nLose=0;
         lose=checkLose();
+
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            if (snakes.get(i).getLen() > oldLen[i]) {
+                points[i]++;
+            }
+        }
+
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             if (lose[i]) ++nLose;
         }

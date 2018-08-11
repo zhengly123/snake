@@ -43,6 +43,7 @@ public class KeyController extends KeyAdapter {
             case KeyEvent.VK_SPACE:
                 System.out.println("Press SPACE");
 //                gameController.start();
+                clientSocket.sendPause();
                 break;
             default:
                 break;

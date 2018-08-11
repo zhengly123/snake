@@ -14,11 +14,16 @@ import java.util.logging.Logger;
 
 public class ServerMainController extends Thread{
     ServerSocket serverSocket;
+
     HashMap<Integer,GameController> gameControllerHashMap=new HashMap<>();
     private Logger logger;
 
     public ServerMainController() {
         logger=Logger.getLogger("ServerMain");
+    }
+
+    public HashMap<Integer, GameController> getGameControllerHashMap() {
+        return gameControllerHashMap;
     }
 
     @Override
@@ -45,16 +50,16 @@ public class ServerMainController extends Thread{
     }
 
     public int createNewGame(Socket socket, ObjectOutputStream oos, ObjectInputStream ois,
-                             MapConfig mapConfig, String username, int gameSpeed) {
+                             MapConfig mapConfig, String username, int gameSpeed,ServerPeerSocket sps) {
         //TODO:user game Speed ????
         int room=gameControllerHashMap.size();
         gameControllerHashMap.put(room,new GameController(mapConfig));
-        gameControllerHashMap.get(room).addUser(username,socket,oos,ois);
+        gameControllerHashMap.get(room).addUser(username,socket,oos,ois,sps);
         return room;
     }
 
     public void joinGame(Socket socket, ObjectOutputStream oos, ObjectInputStream ois,
-                         int room, String username)  {
-        gameControllerHashMap.get(room).addUser(username,socket,oos,ois);
+                         int room, String username,ServerPeerSocket sps)  {
+        gameControllerHashMap.get(room).addUser(username, socket, oos, ois, sps);
     }
 }

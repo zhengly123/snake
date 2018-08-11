@@ -3,7 +3,7 @@ package config;
 import java.io.Serializable;
 
 public class ClientMessage implements Serializable {
-    public boolean hasNewGame,hasJoinGame,hasNewMapConfig,hasDirection,hasMessage;
+    public boolean hasNewGame,hasJoinGame,hasNewMapConfig,hasDirection,hasMessage,hasStop;
 
     //TODO:获得房间信息
     MapConfig mapConfig;
@@ -14,6 +14,13 @@ public class ClientMessage implements Serializable {
 
     int direction;
     String message;
+
+//    boolean stop;
+
+    public void setStop() {
+        hasStop=true;
+    }
+
 
     public void setDirection(int direction) {
         hasDirection=true;

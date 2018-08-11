@@ -13,7 +13,7 @@ public class Snake implements Serializable {
     private ArrayList<Point> bodies;
     private ArrayList<Point> joints;
     public int headDirection,tailDirection;
-    int len;
+//    int len;
     HeadStatus headStatus;
     private boolean inHole;
     private int headInHole;//进洞编号
@@ -46,6 +46,10 @@ public class Snake implements Serializable {
         }
     }
 
+    public int getLen() {
+        return bodies.size();
+    }
+
     public Boolean conflict(Point point) {
         for (Point body:bodies)
             if (point.equals(body))
@@ -66,7 +70,7 @@ public class Snake implements Serializable {
 
         headDirection=tailDirection=(direction+2)%4;
         joints=new ArrayList<>();
-        this.len=len;
+//        this.len=len;
         headStatus=HeadStatus.Normal;
         inHole =false;
         this.chess=chess;

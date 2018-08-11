@@ -41,6 +41,10 @@ public class MapConfig implements Serializable {
         holeLen=2;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
     public int getSnakeInitLen() {
         return snakeInitLen;
     }

@@ -130,3 +130,7 @@ class SoundClipTest extends JFrame {
         }
     }
 }
+
+public class MusicPlayer {
+
+}
