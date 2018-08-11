@@ -1,22 +1,33 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 enum HeadStatus{Normal,ReadyToInHole,InHole};
 
-public class Snake {
+public class Snake implements Serializable {
     static final int [][]move={{1,0},{0,1},{-1,0},{0,-1}};
     static final Random randomInt = new Random(1015);
 
     private ArrayList<Point> bodies;
     private ArrayList<Point> joints;
-    int headDirection,tailDirection;
+    public int headDirection,tailDirection;
     int len;
     HeadStatus headStatus;
     private boolean inHole;
     private int headInHole;//进洞编号
     private Chess chess;
+
+    public static Snake getNullSnake() {
+        return new Snake();
+    }
+
+    public Snake() {
+        bodies=new ArrayList<>();
+        joints=new ArrayList<>();
+        chess=null;
+    }
 
     public boolean isInHole() {
         return inHole;

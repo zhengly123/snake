@@ -2,12 +2,13 @@ package entity;
 
 import config.MapConfig;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
 enum Status {EMPTY,EGG,HOLE,SNAKE,WALL,INVALID,SNAKETAIL,INHOLE};
-public class Chess {
+public class Chess implements Serializable {
     static final int maxTryTimeInGen=1000;
 
     public MapConfig getMapConfig() {
@@ -16,9 +17,15 @@ public class Chess {
 
     private MapConfig mapConfig;
     private ArrayList<Point> walls;
+
+    public Snake getSnakes(int i) {
+        return snakes.get(i);
+    }
+
     private ArrayList<Snake> snakes;
     private ArrayList<Point> holes;
     private ArrayList<Point> eggs;
+    private int[] lives;
 //    boolean[] holeStatus;
     //TODO:add loser log
 
@@ -28,6 +35,10 @@ public class Chess {
         snakes=new ArrayList<>();
         holes=new ArrayList<>();
         eggs=new ArrayList<>();
+        lives=new int[mapConfig.nPlayer];
+        for (int i = 0; i < mapConfig.nPlayer; ++i) {
+            lives[i]=mapConfig.getnLives()-1;
+        }
         genWalls();
         genHoles();
         genEggs();
@@ -78,7 +89,7 @@ public class Chess {
      * 放置两条蛇
      */
     public void initSnake() {
-        for (int i=0;i<mapConfig.getnSnakes();++i)
+        for (int i = 0; i<mapConfig.getnLives(); ++i)
             snakes.add(genSnake(mapConfig.getSnakeInitLen()));
     }
 
@@ -118,7 +129,7 @@ public class Chess {
      * 判断该点在地图中的位置
      * @param point
      * @return 0表示空格
-     * @deprecated
+     * @Deprecated
      */
     public int pointConflict(Point point) {
         if (!point.inMap(mapConfig.size))
@@ -192,9 +203,9 @@ public class Chess {
         char[][] map=new char[mapConfig.size][mapConfig.size];
 //        for (int i=0;i<mapConfig.size;++i)
 //            for (int i=0;i<mapConfig.size;++i)
-        for (char[] column : map) {
-            for (char c:column)
-                c=' ';
+        for (char[] row : map) {
+            for (int i=0;i<getMapConfig().getSize();++i)
+                row[i]=' ';
         }
         for (Point p:walls){
             map[p.getX()][p.getY()]='W';
@@ -228,12 +239,17 @@ public class Chess {
         char[][] chess= getCharMap();
         for (char[] row:chess)
         {
-            for (char c:row)
+            for (Character c:row)
                 System.out.print(c);
             System.out.println();
         }
         for (int i=0;i<getMapConfig().nPlayer;++i)
             snakes.get(i).print(i);
+        System.out.println("Lives array");
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            System.out.printf("%2d ",lives[i]);
+        }
+        System.out.println("");
     }
 
     ///-------------------------------------
@@ -292,8 +308,24 @@ public class Chess {
 
     private boolean[] checkLose() {
         boolean[] lose=new boolean[getMapConfig().nPlayer];
+        //输的玩家在死亡后下一个Round消失
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            if (lives[i] == 0) {
+                snakes.set(i,Snake.getNullSnake());
+            }
+        }
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             lose[i]=checkHeadConfilct(i);
+        }
+
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            if (!lose[i])
+                continue;
+            lives[i]--;
+            if (lose[i] && lives[i] > 0) {
+                snakes.set(i, genSnake(mapConfig.getSnakeInitLen()));
+                lose[i] = false;
+            }
         }
         return lose;
     }
@@ -302,6 +334,8 @@ public class Chess {
         //move all snake but not modify chess
         Set<Integer> eatenEggs=new TreeSet<>();
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            if (lives[i]==0)
+                continue;
             eatenEggs.addAll(snakeMove(i, direction[i]));
         }
 

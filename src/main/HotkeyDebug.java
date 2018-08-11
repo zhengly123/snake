@@ -26,6 +26,7 @@ class HotkeyTestGui {
         frame.setSize(400,400);
         frame.setVisible(true);
         GameController gameController=new GameController(new MapConfig());
-        frame.addKeyListener(new controller.KeyController(gameController));
+//        frame.addKeyListener(new controller.KeyController(gameController));
+        //TODO: copy this keycontroller to main window
     }
 }

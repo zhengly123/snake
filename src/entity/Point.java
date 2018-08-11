@@ -1,11 +1,15 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
-public class Point {
+public class Point implements Serializable {
     private int x,y;
     static Random randomInt = new Random(1015);
+    /**
+     * 下右上左
+     */
     static final int [][]move={{1,0},{0,1},{-1,0},{0,-1}};
 
     public Point(int x, int y) {
