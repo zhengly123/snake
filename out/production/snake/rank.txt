@@ -1,10 +1,10 @@
 Alice 8
+Alice 8
+Alice 7
 Alice 4
 Alice 4
 Alice 4
+Alice 4
 Alice 3
 Alice 3
 Alice 3
-Alice 3
-Alice 2
-Alice 1

@@ -1,6 +1,7 @@
 package Window;
 
 import config.MapConfig;
+import controller.KeyController;
 import entity.Chess;
 import entity.Snake;
 import entity.Point;
@@ -34,6 +35,8 @@ public class GameWindow {
     private JLabel musicNameLabel;
     private JTable userTable;
     private JPanel inHolePanel;
+    private JRadioButton directionKeyRadioButton;
+    private JRadioButton AWSDRadioButton;
     //    private JScrollPane userList;
     //    private JTextArea sendMessageTextArea;
     MapConfig mapConfig;
@@ -42,6 +45,8 @@ public class GameWindow {
     private JFrame outerFrame;
     private Image headImage[][], bodyImage[], tailImage[][], eggImage, holeImage;
     private Image wallImage, grassImage, collisionsImage[];
+    private KeyController keyController;
+    private int pauseFrom;
 
     void readImage() {
         bodyImage = new Image[4];
@@ -57,7 +62,7 @@ public class GameWindow {
             collisionsImage[i] = new ImageIcon(this.getClass().getResource("/res/exp" + i + ".png")).getImage();
         }
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 4; ++i) {
             bodyImage[i] = new ImageIcon(this.getClass().getResource("/res/body" + i + ".jpg")).getImage();
             headImage[i] = new Image[4];
             for (int j = 0; j < 4; ++j) {
@@ -67,10 +72,12 @@ public class GameWindow {
         }
     }
 
-    public GameWindow(MapConfig mapConfig, ClientSocket clientSocket, JFrame outerFrame, String[] usernames) {
+    public GameWindow(MapConfig mapConfig, ClientSocket clientSocket, JFrame outerFrame,
+                      String[] usernames, KeyController keyController) {
         this.mapConfig = mapConfig;
         this.clientSocket = clientSocket;
         this.outerFrame = outerFrame;
+        this.keyController = keyController;
         readImage();
 
         GridLayout gridLayout = new GridLayout(mapConfig.size, mapConfig.size);
@@ -81,6 +88,7 @@ public class GameWindow {
         inHolePanel = new BlockPanel();
         ((BlockPanel) inHolePanel).setImage(holeImage);
         inHolePanel.setVisible(false);
+//        inHolePanel.setEnabled(false);
         $$$setupUI$$$();
 
         chessPanel.setLayout(gridLayout);
@@ -159,6 +167,18 @@ public class GameWindow {
                 stopButton.setEnabled(false);
                 playDefaultMusicButton.setEnabled(true);
                 localMusicButton.setEnabled(true);
+            }
+        });
+        AWSDRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyController.setAWDS(true);
+            }
+        });
+        directionKeyRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyController.setAWDS(false);
             }
         });
     }
@@ -266,12 +286,18 @@ public class GameWindow {
         // TODO: place custom component creation code here
     }
 
-    public void setStatusText(String statusText) {
+    public void setStatusText(String statusText, int pauseFrom) {
         statusJLabel.setText(statusText);
-        if (statusText == "Pause")
+        if (statusText == "Pause") {
             pauseButton.setText("Continue\n(Cancel my pause)");
-        else
+            if (pauseFrom != 1) {
+                pauseButton.setEnabled(false);
+            } else
+                pauseButton.setEnabled(true);
+        } else {
             pauseButton.setText("Pause");
+            pauseButton.setEnabled(true);
+        }
     }
 
     public void addChatMessage(String username, String msg) {
@@ -397,13 +423,14 @@ public class GameWindow {
         gbc.fill = GridBagConstraints.BOTH;
         cp.add(tabbedPane1, gbc);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane1.addTab("Game", panel2);
         pauseButton = new JButton();
         pauseButton.setFocusable(false);
         pauseButton.setRequestFocusEnabled(false);
         pauseButton.setText("Pause");
-        panel2.add(pauseButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        pauseButton.setVisible(false);
+        panel2.add(pauseButton, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
         scrollPane2.setEnabled(false);
         panel2.add(scrollPane2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -419,6 +446,15 @@ public class GameWindow {
         statusJLabel.setText("Running");
         panel2.add(statusJLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         panel2.add(inHolePanel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(70, 70), null, new Dimension(70, 70), 0, false));
+        directionKeyRadioButton = new JRadioButton();
+        directionKeyRadioButton.setFocusable(false);
+        directionKeyRadioButton.setSelected(true);
+        directionKeyRadioButton.setText("Direction Key");
+        panel2.add(directionKeyRadioButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        AWSDRadioButton = new JRadioButton();
+        AWSDRadioButton.setFocusable(false);
+        AWSDRadioButton.setText("AWSD");
+        panel2.add(AWSDRadioButton, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane1.addTab("Music", panel3);
@@ -442,6 +478,10 @@ public class GameWindow {
         musicNameLabel = new JLabel();
         musicNameLabel.setText("Autumn (Default)");
         panel3.add(musicNameLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        ButtonGroup buttonGroup;
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(directionKeyRadioButton);
+        buttonGroup.add(AWSDRadioButton);
     }
 
     /**

@@ -35,6 +35,7 @@ public class ClientLogin {
     private JSlider playerNumberslider;
     private JButton rankingButton;
     private JPanel logoPanel;
+    private JSlider mapSizeSlider;
     private Logger logger = Logger.getLogger("Login");
 
     ClientSocket clientSocket;
@@ -53,7 +54,7 @@ public class ClientLogin {
         startServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                serverMainController = new ServerMainController();
+                serverMainController = new ServerMainController(ClientLogin.this);
                 ClientLogin.this.changeButtonStatus(3);
                 serverMainController.start();
             }
@@ -93,7 +94,12 @@ public class ClientLogin {
     }
 
     private MapConfig getMapConfig() {
-        return new MapConfig(playerNumberslider.getValue(), gameSpeedSlider.getValue());
+        return new MapConfig(playerNumberslider.getValue(), gameSpeedSlider.getValue(),
+                mapSizeSlider.getValue());
+    }
+
+    public int getPort() {
+        return Integer.parseInt(a8123TextField.getText());
     }
 
     private void changeAllButtonStatus(boolean startServer, boolean connectToServer, boolean newRoom,
@@ -135,6 +141,12 @@ public class ClientLogin {
         logger.info("Get room number " + room);
     }
 
+    public void clearToInit() {
+        serverMainController = null;
+        clientSocket = null;
+        changeButtonStatus(0);
+    }
+
     private void createUIComponents() {
         // TODO: place custom component creation code here
         logoPanel = new BlockPanel();
@@ -173,13 +185,13 @@ public class ClientLogin {
         newRoomButton.setText("New room");
         panel2.add(newRoomButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(7, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(8, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel2.add(panel3, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Server IP");
         panel3.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(6, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(7, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         a127001TextField = new JTextField();
         a127001TextField.setText("127.0.0.1");
         panel3.add(a127001TextField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -202,7 +214,7 @@ public class ClientLogin {
         label4.setText("Username");
         panel3.add(label4, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
-        label5.setText("Speed");
+        label5.setText("Movement interval");
         panel3.add(label5, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         gameSpeedSlider = new JSlider();
         gameSpeedSlider.setInverted(false);
@@ -211,7 +223,7 @@ public class ClientLogin {
         gameSpeedSlider.setMinimum(1);
         gameSpeedSlider.setPaintLabels(true);
         gameSpeedSlider.setPaintTicks(false);
-        gameSpeedSlider.setValue(5);
+        gameSpeedSlider.setValue(2);
         panel3.add(gameSpeedSlider, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setText("Player number");
@@ -225,6 +237,18 @@ public class ClientLogin {
         playerNumberslider.setSnapToTicks(false);
         playerNumberslider.setValue(2);
         panel3.add(playerNumberslider, new com.intellij.uiDesigner.core.GridConstraints(5, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label7 = new JLabel();
+        label7.setText("Map size");
+        panel3.add(label7, new com.intellij.uiDesigner.core.GridConstraints(6, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        mapSizeSlider = new JSlider();
+        mapSizeSlider.setMajorTickSpacing(1);
+        mapSizeSlider.setMaximum(18);
+        mapSizeSlider.setMinimum(8);
+        mapSizeSlider.setPaintLabels(true);
+        mapSizeSlider.setPaintTicks(false);
+        mapSizeSlider.setSnapToTicks(false);
+        mapSizeSlider.setValue(13);
+        panel3.add(mapSizeSlider, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         rankingButton = new JButton();
         rankingButton.setEnabled(false);
         rankingButton.setText("龙虎榜");

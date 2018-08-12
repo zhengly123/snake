@@ -6,6 +6,7 @@ import controller.GameController;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 public class ServerGameSocket implements Runnable {
     ObjectInputStream ois;

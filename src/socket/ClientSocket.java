@@ -2,9 +2,11 @@ package socket;
 
 import Window.ClientLogin;
 import Window.GameWindow;
+import Window.RankingWindow;
 import config.ClientMessage;
 import config.MapConfig;
 import config.ServerMessage;
+import controller.KeyController;
 import controller.ServerMainController;
 
 import javax.swing.*;
@@ -156,14 +158,14 @@ public class ClientSocket implements Runnable{
                 if (serverMessage.hasChess) {
                     gameWindow.paintChess(serverMessage.getChess());
                     gameWindow.updateUserList(serverMessage.getChess(),serverMessage.getPlayerOnline());
-                    gameWindow.setStatusText("Running");
+                    gameWindow.setStatusText("Running",0);
                     System.out.printf("-------Round %d-------",serverMessage.round);
                     serverMessage.getChess().printMap();
                     System.out.println("----------------------");
                 }
 
                 if (serverMessage.hasPause) {
-                    pause();
+                    pause(serverMessage.getPauseFrom());
                 }
 
                 if (serverMessage.hasMessage) {
@@ -173,6 +175,9 @@ public class ClientSocket implements Runnable{
 
                 if (serverMessage.hasEnd) {
                     endGame(serverMessage);
+                    RankingWindow rankingWindow = new RankingWindow(serverMessage.getRankingNames(),
+                            serverMessage.getRankingPoints());
+                    logger.info("Show Ranking list");
                     break;
 
                 }
@@ -209,8 +214,8 @@ public class ClientSocket implements Runnable{
         }
     }
 
-    private void pause() {
-        gameWindow.setStatusText("Pause");
+    private void pause(int pauseFrom) {
+        gameWindow.setStatusText("Pause",pauseFrom);
     }
 
     public void sendMove(int direction) {
@@ -226,19 +231,23 @@ public class ClientSocket implements Runnable{
     }
 
     private void showGameWindow(MapConfig mapConfig,String[] usernames) {
+        KeyController keyController=new controller.KeyController(this);
         JFrame frame = new JFrame("Snake game window");
-        frame.setContentPane((gameWindow=new GameWindow(mapConfig,this,frame,usernames)).cp);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.addKeyListener(new controller.KeyController(this));
+        frame.setContentPane((gameWindow=new GameWindow(mapConfig,this,frame,usernames,
+                keyController)).cp);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.addKeyListener(keyController);
         frame.setSize(700, 600);
 //        frame.setResizable(false);
         frame.setVisible(true);
         frame.requestFocus();
+        //如果窗口关闭，则login Window恢复，释放线程
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 gameStopped=true;
+                loginWindow.clearToInit();
             }
         });
     }

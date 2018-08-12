@@ -128,7 +128,7 @@ public class Chess implements Serializable {
      * 放置两条蛇
      */
     public void initSnake() {
-        for (int i = 0; i<mapConfig.getnLives(); ++i)
+        for (int i = 0; i<mapConfig.nPlayer;++i)
             snakes.add(genSnake(mapConfig.getSnakeInitLen()));
     }
 

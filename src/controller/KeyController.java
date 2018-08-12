@@ -8,6 +8,16 @@ import java.awt.event.KeyEvent;
 public class KeyController extends KeyAdapter {
     private GameController gameController=null;
 
+    public boolean isAWDS() {
+        return awds;
+    }
+
+    public void setAWDS(boolean AWDS) {
+        this.awds = AWDS;
+    }
+
+    boolean awds=false;
+
     public KeyController(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
     }
@@ -19,38 +29,69 @@ public class KeyController extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                System.out.println("Press UP");
+        if (!awds) {
+            switch (e.getKeyCode()) {
+
+                case KeyEvent.VK_UP:
+                    System.out.println("Press UP");
 //                gameController.setPlayerDirection(0,2);
-                clientSocket.sendMove(2);
-                break;
-            case KeyEvent.VK_DOWN:
-                System.out.println("Press DOWN");
+                    clientSocket.sendMove(2);
+                    break;
+                case KeyEvent.VK_DOWN:
+                    System.out.println("Press DOWN");
 //                gameController.setPlayerDirection(0,0);
-                clientSocket.sendMove(0);
-                break;
-            case KeyEvent.VK_LEFT:
-                System.out.println("Press LEFT");
+                    clientSocket.sendMove(0);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    System.out.println("Press LEFT");
 //                gameController.setPlayerDirection(0,3);
-                clientSocket.sendMove(3);
-                break;
-            case KeyEvent.VK_RIGHT:
-                System.out.println("Press RIGHT");
+                    clientSocket.sendMove(3);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    System.out.println("Press RIGHT");
 //                gameController.setPlayerDirection(0,1);
-                clientSocket.sendMove(1);
-                break;
-            case KeyEvent.VK_SPACE:
-                System.out.println("Press SPACE");
+                    clientSocket.sendMove(1);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    System.out.println("Press SPACE");
 //                gameController.start();
-                clientSocket.sendPause();
-                break;
-            default:
-                break;
+                    clientSocket.sendPause();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    System.out.println("Press UP");
+//                gameController.setPlayerDirection(0,2);
+                    clientSocket.sendMove(2);
+                    break;
+                case KeyEvent.VK_S:
+                    System.out.println("Press DOWN");
+//                gameController.setPlayerDirection(0,0);
+                    clientSocket.sendMove(0);
+                    break;
+                case KeyEvent.VK_A:
+                    System.out.println("Press LEFT");
+//                gameController.setPlayerDirection(0,3);
+                    clientSocket.sendMove(3);
+                    break;
+                case KeyEvent.VK_D:
+                    System.out.println("Press RIGHT");
+//                gameController.setPlayerDirection(0,1);
+                    clientSocket.sendMove(1);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    System.out.println("Press SPACE");
+//                gameController.start();
+                    clientSocket.sendPause();
+                    break;
+                default:
+                    break;
+            }
+
+
         }
-    }
-
-    public static void main(String[] args) {
-
     }
 }

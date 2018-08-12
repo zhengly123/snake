@@ -13,6 +13,7 @@ public class ServerMessage implements Serializable{
     MapConfig mapConfig;
     Chess chess;
     boolean[] playerOnline;
+    int pauseFrom;
 
     String message,messageFrom;
 
@@ -42,6 +43,10 @@ public class ServerMessage implements Serializable{
         return playerOnline;
     }
 
+    public int getPauseFrom() {
+        return pauseFrom;
+    }
+
     public int getRoom() {
         return room;
     }
@@ -67,8 +72,9 @@ public class ServerMessage implements Serializable{
         return usernames;
     }
 
-    public void setPause() {
+    public void setPause(int index) {
         hasPause =true;
+        pauseFrom =index;
     }
 
     public void setMessage(String username,String message) {

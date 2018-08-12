@@ -24,6 +24,7 @@ public class GameController extends TimerTask {
 //    private boolean isRunning=false;
     GameStatus status;
     int pauseFrom;
+    private int room;
 //    MapConfig mapConfig;
     private Chess chess;
     private int nPlayer;
@@ -55,12 +56,15 @@ public class GameController extends TimerTask {
         logger.info("Player "+c+" " +userNames[c]+" direction "+direction);
     }
 
-    public GameController(MapConfig mapConfig) {
+    public GameController(MapConfig mapConfig,int room) {
         this(new Chess(mapConfig),mapConfig);
+        this.room=room;
     }
 
     public synchronized void addUser(String userName, Socket socket, ObjectOutputStream oos,
-                                     ObjectInputStream ois, ServerPeerSocket serverPeerSocket) {
+                                     ObjectInputStream ois, ServerPeerSocket serverPeerSocket,int room) {
+        if (nAddedPlayer==nPlayer)
+            return;
         userNames[nAddedPlayer]=userName;
         sockets[nAddedPlayer]=socket;
         objectOutputStreams[nAddedPlayer]=oos;
@@ -68,7 +72,7 @@ public class GameController extends TimerTask {
         nAddedPlayer++;
         logger.info("user "+userName+" added to the game. #currrent player "+nAddedPlayer);
         //必须先发送
-        serverPeerSocket.sendRoomInfo();
+        serverPeerSocket.sendRoomInfo(room);
         if (nAddedPlayer == nPlayer) {
             start();
         }
@@ -115,6 +119,8 @@ public class GameController extends TimerTask {
 //        serverMessage.setInit();
         serverMessage.setInit(chess.getMapConfig(),userNames);
         serverMessage.setChess(chess,round,playerOnline);
+        serverMessage.setRoom(room);
+        logger.info("Send room num "+room);
         for (Integer i=0;i<nPlayer;++i) {
             ObjectOutputStream oos = objectOutputStreams[i];
             try {
@@ -203,7 +209,20 @@ public class GameController extends TimerTask {
             pauseFrom=index;
 
             ServerMessage serverMessage=new ServerMessage();
-            serverMessage.setPause();
+            serverMessage.setPause(0);
+//            for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+//                if (i != index) {
+//                    serverMessage.setPause(0);
+//                }
+//                else
+//                    serverMessage.setPause(1);
+//                try {
+//                    objectOutputStreams[i].writeObject(serverMessage);
+//                    objectOutputStreams[i].reset();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
             sendServerMsgToAll(serverMessage);
         } else if (status == GameStatus.PAUSE && pauseFrom == index) {
             status=GameStatus.RUNNING;
@@ -257,7 +276,7 @@ public class GameController extends TimerTask {
         }
     }
 
-    private void updateRanking() {
+    private void updateRanking(ServerMessage serverMessage) {
         ArrayList<String> names=new ArrayList<>();
         ArrayList<Integer> points=new ArrayList<>();
         readRank(names,points);
@@ -266,6 +285,7 @@ public class GameController extends TimerTask {
             points.add(chess.getPoints()[i]);
         }
         writeRank(names,points);
+        serverMessage.setRanking(names,points);
     }
 
     static private void sortRank(ArrayList<String> names, ArrayList<Integer> points) {
@@ -287,7 +307,7 @@ public class GameController extends TimerTask {
     private void endGame() {
         ServerMessage serverMessage=new ServerMessage();
         //TODO: add game end operation
-        updateRanking();
+        updateRanking(serverMessage);
         for (int i = 0; i < nPlayer; ++i) {
             if (loseTime[i]==0)
                 serverMessage.setEnd(Result.WIN);

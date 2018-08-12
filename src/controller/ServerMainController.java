@@ -1,8 +1,10 @@
 package controller;
 
+import Window.ClientLogin;
 import config.MapConfig;
 import socket.ServerPeerSocket;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,9 +20,12 @@ public class ServerMainController extends Thread{
     HashMap<Integer,GameController> gameControllerHashMap=new HashMap<>();
     private Logger logger;
 
-    public ServerMainController() {
+    public ServerMainController(ClientLogin loginWindow) {
+        this.logginWindow = loginWindow;
         logger=Logger.getLogger("ServerMain");
     }
+
+    private ClientLogin logginWindow;
 
     public HashMap<Integer, GameController> getGameControllerHashMap() {
         return gameControllerHashMap;
@@ -28,13 +33,19 @@ public class ServerMainController extends Thread{
 
     @Override
     public void run() {
-        int port=8123;
+        int port;
         try {
+            port=logginWindow.getPort();
             this.serverSocket = new ServerSocket(port);
             logger.info("server socket start, port "+port);
-        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Create server successfully");
+        } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Cannot open server socket");
+            logginWindow.clearToInit();
+            JOptionPane.showMessageDialog(null,
+                    "Cannot create server on this port.");
             return;
         }
         while (true) {
@@ -53,13 +64,14 @@ public class ServerMainController extends Thread{
                              MapConfig mapConfig, String username, int gameSpeed,ServerPeerSocket sps) {
         //TODO:user game Speed ????
         int room=gameControllerHashMap.size();
-        gameControllerHashMap.put(room,new GameController(mapConfig));
-        gameControllerHashMap.get(room).addUser(username,socket,oos,ois,sps);
+        logger.info("New room number "+room);
+        gameControllerHashMap.put(room,new GameController(mapConfig,room));
+        gameControllerHashMap.get(room).addUser(username,socket,oos,ois,sps,room);
         return room;
     }
 
     public void joinGame(Socket socket, ObjectOutputStream oos, ObjectInputStream ois,
                          int room, String username,ServerPeerSocket sps)  {
-        gameControllerHashMap.get(room).addUser(username, socket, oos, ois, sps);
+        gameControllerHashMap.get(room).addUser(username, socket, oos, ois, sps,room);
     }
 }

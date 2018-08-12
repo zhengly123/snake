@@ -13,6 +13,11 @@ public class RankingWindow extends JFrame {
                 "Points"
         };
         Object[][] vals = new Object[10][3];
+
+        while (names.size() > 10) {
+            names.remove(names.size() - 1);
+        }
+
         for (int i = 0; i < names.size(); i++) {
             vals[i][0] = i+1;
             vals[i][1] = names.get(i);

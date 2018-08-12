@@ -45,15 +45,15 @@ public class HotkeyDebug {
 }
 
 class HotkeyTestGui {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("ColorWorld");
-        frame.setContentPane(new HotkeyDebug().cp);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.pack();
-        frame.setSize(400,400);
-        frame.setVisible(true);
-        GameController gameController=new GameController(new MapConfig());
-//        frame.addKeyListener(new controller.KeyController(gameController));
-        //TODO: copy this keycontroller to main window
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("ColorWorld");
+//        frame.setContentPane(new HotkeyDebug().cp);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////        frame.pack();
+//        frame.setSize(400,400);
+//        frame.setVisible(true);
+//        GameController gameController=new GameController(new MapConfig());
+////        frame.addKeyListener(new controller.KeyController(gameController));
+//        //TODO: copy this keycontroller to main window
+//    }
 }

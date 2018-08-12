@@ -102,13 +102,13 @@ public class ServerPeerSocket implements Runnable{
 //        serverMainController.getGameControllerHashMap().get(room).testFullPlayer();
     }
 
-    public void sendRoomInfo() {
+    public void sendRoomInfo(int room) {
         //最后一个人，game controller发送的信息会先到达。所以gc发送两次，覆盖掉这个信息
         ServerMessage serverMessage=new ServerMessage();
         serverMessage.setRoom(room);
         try {
             oos.writeObject(serverMessage);
-            logger.info("Send room number to client");
+            logger.info("Send room number to client, room num is "+room);
         } catch (IOException e) {
             e.printStackTrace();
             logger.severe("Fail to send room number to client");

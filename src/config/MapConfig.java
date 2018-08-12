@@ -12,15 +12,15 @@ public class MapConfig implements Serializable {
     private int snakeInitLen;
     private int holeLen;
 
-    public MapConfig(int nPlayer, int speed) {
-        size=10;
+    public MapConfig(int nPlayer, int speed,int size) {
+        this.size=size;
         nWalls=2;
         nLives =2;
-        nHoles=2;
+        nHoles=4;
         nEggs=2;
         snakeInitLen=2;
         totalSize=size+nHoles/2;
-        holeLen=2;
+        holeLen=4;
         this.nPlayer = nPlayer;
         this.speed = speed;
     }
@@ -34,11 +34,11 @@ public class MapConfig implements Serializable {
         size=10;
         nWalls=2;
         nLives =2;
-        nHoles=2;
+        nHoles=4;
         nEggs=2;
         snakeInitLen=2;
         totalSize=size+nHoles/2;
-        holeLen=2;
+        holeLen=4;
     }
 
     public int getSpeed() {
