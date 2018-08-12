@@ -4,11 +4,12 @@ import entity.Chess;
 import entity.Point;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class ServerMessage implements Serializable{
-    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions, hasPause;
+    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions, hasPause,hasRanking;
     MapConfig mapConfig;
     Chess chess;
 
@@ -17,7 +18,25 @@ public class ServerMessage implements Serializable{
     Point[] collisions;
     String[] usernames;
     Result result;
+
+    ArrayList<String> rankingNames;
+    ArrayList<Integer> rankingPoints;
     public int round;
+
+    public ArrayList<String> getRankingNames() {
+        return rankingNames;
+    }
+
+    public void setRanking(ArrayList<String> rankingNames,ArrayList<Integer> rankingPoints) {
+        hasRanking=true;
+        this.rankingNames = rankingNames;
+        this.rankingPoints = rankingPoints;
+    }
+
+    public ArrayList<Integer> getRankingPoints() {
+        return rankingPoints;
+    }
+
 
     public int getRoom() {
         return room;

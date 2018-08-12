@@ -8,14 +8,15 @@ import entity.Chess;
 import socket.ServerGameSocket;
 import socket.ServerPeerSocket;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import javax.swing.*;
+import java.io.*;
 import java.net.Socket;
-import java.util.Map;
+import java.security.KeyPair;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
+
+//import static jdk.nashorn.internal.objects.NativeMath.min;
 
 enum GameStatus{STOPPED,RUNNING, PAUSE,OFFLINE};
 
@@ -70,6 +71,10 @@ public class GameController extends TimerTask {
         if (nAddedPlayer == nPlayer) {
             start();
         }
+    }
+
+    static private int min(int a, int b) {
+        return (a>b)?b:a;
     }
 
     private GameController(Chess chess, MapConfig mapConfig) {
@@ -211,9 +216,73 @@ public class GameController extends TimerTask {
         }
     }
 
+    static public void readRank(ArrayList<String> names,ArrayList<Integer> points) {
+        File file = new File("rank.txt");
+        String name;
+        int point;
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                name = scanner.next();
+                point = scanner.nextInt();
+                names.add(name);
+                points.add(point);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+
+        }
+        sortRank(names,points);
+    }
+
+    static private synchronized void writeRank(ArrayList<String> names, ArrayList<Integer> points) {
+//        File file = new File("rank.txt");
+        sortRank(names,points);
+        try {
+            FileWriter writer=new FileWriter("rank.txt");
+            for (int i=0;i<min(names.size(),10);++i)
+            writer.write(names.get(i)+" "+points.get(i)+"\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Cannot save file.");
+//            logger.warning("Cannot not save rank file");
+        }
+    }
+
+    private void updateRanking() {
+        ArrayList<String> names=new ArrayList<>();
+        ArrayList<Integer> points=new ArrayList<>();
+        readRank(names,points);
+        for (int i = 0; i < getMapConfig().nPlayer; ++i) {
+            names.add(userNames[i]);
+            points.add(chess.getPoints()[i]);
+        }
+        writeRank(names,points);
+    }
+
+    static private void sortRank(ArrayList<String> names, ArrayList<Integer> points) {
+        for (int i = 0; i < points.size(); ++i) {
+            for (int j = i+1; j < points.size(); ++j) {
+                if (points.get(i) < points.get(j)) {
+                    int t=points.get(i);
+                    points.set(i,points.get(j));
+                    points.set(j, t);
+
+                    String tt = names.get(i);
+                    names.set(i, names.get(j));
+                    names.set(j, tt);
+                }
+            }
+        }
+    }
+
     private void endGame() {
         ServerMessage serverMessage=new ServerMessage();
         //TODO: add game end operation
+        updateRanking();
         for (int i = 0; i < nPlayer; ++i) {
             if (loseTime[i]==0||(nLosePlayer==nPlayer&&loseTime[i]==round))
                 serverMessage.setEnd(Result.WIN);
@@ -226,7 +295,6 @@ public class GameController extends TimerTask {
                 logger.warning("Fail to send end game msg");
             }
         }
-        
     }
 
     public void sendMessage(int index,String msg) {

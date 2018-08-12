@@ -80,6 +80,23 @@ public class ClientSocket implements Runnable{
         }
     }
 
+    public ServerMessage getRanking() {
+        ClientMessage clientMessage = new ClientMessage();
+        clientMessage.setRankingAsk();
+        ServerMessage serverMessage=null;
+        try {
+            oos.writeObject(clientMessage);
+            serverMessage=(ServerMessage)ois.readObject();
+        } catch (IOException e) {
+//            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Cannot connect to server.");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Unknown error.");
+        }
+        return serverMessage;
+    }
+
 
     /**
      * 加入房间，过程阻塞

@@ -7,6 +7,7 @@ import controller.ServerMainController;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -57,17 +58,43 @@ public class ServerPeerSocket implements Runnable{
             }
             break;
         }
-        if (clientMessage.hasNewGame) {
-            room=serverMainController.createNewGame(socket,oos,ois,clientMessage.getMapConfig(),clientMessage.getUsername(),
-                    clientMessage.getGameSpeed(),this);
-        } else if (clientMessage.hasJoinGame) {
-            serverMainController.joinGame(socket,oos,ois,clientMessage.getRoom(),
-                    clientMessage.getUsername(),this);
-        }
-        else
-        {
-            logger.severe("Recv unqualified 1st msg");
-            return;
+        while (true) {
+            if (clientMessage.hasNewGame) {
+                room=serverMainController.createNewGame(socket,oos,ois,clientMessage.getMapConfig(),clientMessage.getUsername(),
+                        clientMessage.getGameSpeed(),this);
+                break;
+            } else if (clientMessage.hasJoinGame) {
+                serverMainController.joinGame(socket,oos,ois,clientMessage.getRoom(),
+                        clientMessage.getUsername(),this);
+                break;
+            }
+            else if (clientMessage.hasRankingAsk){
+                ArrayList<String> names=new ArrayList<>();
+                ArrayList<Integer> points=new ArrayList<>();
+                GameController.readRank(names,points);
+                ServerMessage serverMessage=new ServerMessage();
+                serverMessage.setRanking(names,points);
+                try {
+                    oos.writeObject(serverMessage);
+                    logger.info("Sent ranking msg");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                logger.severe("Recv unqualified 1st msg");
+            }
+
+            Object object= null;
+            try {
+                object = ois.readObject();
+                clientMessage=(ClientMessage) object;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            logger.info("Client 1st msg recved again");
         }
         //send room number to client.
 //        serverMessage.setInit(serverMainController.getGameControllerHashMap().get(room).getMapConfig(),
