@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 enum Status {EMPTY,EGG,HOLE,SNAKE,WALL,INVALID,SNAKETAIL,INHOLE};
 public class Chess implements Serializable {
@@ -38,6 +39,14 @@ public class Chess implements Serializable {
         return snakes.get(i);
     }
 
+    public ArrayList<Point> getCollisionsPoint() {
+        return collisionsPoint;
+    }
+
+    public ArrayList<Integer> getCollisionFrames() {
+        return collisionFrames;
+    }
+
     public int[] getLives() {
         return lives;
     }
@@ -49,8 +58,11 @@ public class Chess implements Serializable {
     private ArrayList<Snake> snakes;
     private ArrayList<Point> holes;
     private ArrayList<Point> eggs;
+    private ArrayList<Point> collisionsPoint;
+    private ArrayList<Integer> collisionFrames;
     private int[] lives,points;
 //    boolean[] holeStatus;
+    private static Logger logger=Logger.getLogger("Chess");
     //TODO:add loser log
 
     public Chess(MapConfig mapConfig) {
@@ -61,6 +73,8 @@ public class Chess implements Serializable {
         eggs=new ArrayList<>();
         lives=new int[mapConfig.nPlayer];
         points=new int[mapConfig.nPlayer];
+        collisionFrames=new ArrayList<>();
+        collisionsPoint=new ArrayList<>();
         for (int i = 0; i < mapConfig.nPlayer; ++i) {
             lives[i]=mapConfig.getnLives();
         }
@@ -263,9 +277,9 @@ public class Chess implements Serializable {
         Snake snake;
         boolean success=false;
         for (int i = 0; i < mapConfig.getnHoles(); ++i) {
-            snake=new Snake(new Point(i,1),this,i);
+            snake=new Snake(new Point(mapConfig.size+i/2,1),this,i);
             snakes.set(index, snake);
-            if (!checkHeadConfilct(i)) {
+            if (!checkHeadConfilct(index)) {
                 success=true;
 //                s//TODO:蛇没有从洞里出来，到底是从哪里生成的？？
                 break;
@@ -273,7 +287,10 @@ public class Chess implements Serializable {
         }
         if (!success) {
             snakes.set(index, genSnake(mapConfig.getSnakeInitLen()));
+            logger.info("Fail to produce snake in holes");
         }
+        else
+            logger.info("Succeed to produce snake in holes");
     }
 
     public void printMap() {
@@ -354,6 +371,23 @@ public class Chess implements Serializable {
         return false;
     }
 
+    private boolean checkSnakePointConfilct(int c) {
+        for (Point head : snakes.get(c).getBodies()) {
+//            Point head=snakes.get(c).getHead();
+
+            if (walls.indexOf(head)>=0)
+                return true;
+
+            for (int j = 0; j < getMapConfig().nPlayer; ++j) {
+                if (j != c) {
+                    if (snakes.get(j).conflict(head))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean[] checkLose() {
         boolean[] lose=new boolean[getMapConfig().nPlayer];
         //输的玩家在死亡后下一个Round消失
@@ -364,6 +398,10 @@ public class Chess implements Serializable {
         }
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             lose[i]=checkHeadConfilct(i);
+            if (lose[i]) {
+                collisionFrames.add(2);
+                collisionsPoint.add(snakes.get(i).getHead());
+            }
         }
 
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
@@ -383,6 +421,16 @@ public class Chess implements Serializable {
         //move all snake but not modify chess
         Set<Integer> eatenEggs=new TreeSet<>();
         int[] oldLen=new int[getMapConfig().nPlayer];
+
+        for (int i = collisionsPoint.size() - 1; i >= 0; --i) {
+            if (collisionFrames.get(i) == 0) {
+                collisionFrames.remove(i);
+                collisionsPoint.remove(i);
+            }
+            else
+                collisionFrames.set(i,collisionFrames.get(i)-1);
+        }
+
         for (int i = 0; i < getMapConfig().nPlayer; ++i) {
             oldLen[i]=snakes.get(i).getLen();
         }

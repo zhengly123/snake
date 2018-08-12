@@ -33,23 +33,30 @@ public class GameWindow {
     private JButton localMusicButton;
     private JLabel musicNameLabel;
     private JTable userTable;
+    private JPanel inHolePanel;
     //    private JScrollPane userList;
     //    private JTextArea sendMessageTextArea;
     MapConfig mapConfig;
     ClientSocket clientSocket;
     BlockPanel[][] chessArray;
     private JFrame outerFrame;
-    private Image headImage[][], bodyImage[], tailImage[][], eggImage, holeImage, wallImage, grassImage;
+    private Image headImage[][], bodyImage[], tailImage[][], eggImage, holeImage;
+    private Image wallImage, grassImage, collisionsImage[];
 
     void readImage() {
         bodyImage = new Image[4];
         headImage = new Image[4][];
+        collisionsImage = new Image[3];
         Image image = null;
         //TODO: produce other 2 image
         grassImage = new ImageIcon(this.getClass().getResource("/res/grass.jpg")).getImage();
         eggImage = new ImageIcon(this.getClass().getResource("/res/egg.png")).getImage();
         holeImage = new ImageIcon(this.getClass().getResource("/res/hole.png")).getImage();
         wallImage = new ImageIcon(this.getClass().getResource("/res/wall.png")).getImage();
+        for (int i = 0; i < 3; ++i) {
+            collisionsImage[i] = new ImageIcon(this.getClass().getResource("/res/exp" + i + ".png")).getImage();
+        }
+
         for (int i = 0; i < 2; ++i) {
             bodyImage[i] = new ImageIcon(this.getClass().getResource("/res/body" + i + ".jpg")).getImage();
             headImage[i] = new Image[4];
@@ -71,6 +78,9 @@ public class GameWindow {
         userTable = createUserTable(usernames);
         chessPanel = new BlockPanel();
         ((BlockPanel) chessPanel).setImage(grassImage);
+        inHolePanel = new BlockPanel();
+        ((BlockPanel) inHolePanel).setImage(holeImage);
+        inHolePanel.setVisible(false);
         $$$setupUI$$$();
 
         chessPanel.setLayout(gridLayout);
@@ -78,7 +88,7 @@ public class GameWindow {
         for (int i = 0; i < mapConfig.size; ++i) {
             chessArray[i] = new BlockPanel[mapConfig.size];
             for (int j = 0; j < mapConfig.size; ++j) {
-                chessArray[i][j] = new BlockPanel();
+                chessArray[i][j] = new BlockPanel(true);
                 chessArray[i][j].setBackground(null);
                 chessArray[i][j].setOpaque(false);
                 chessPanel.add(chessArray[i][j]);
@@ -168,12 +178,19 @@ public class GameWindow {
 
     public void paintChess(Chess chess) {
 //        g.drawImage(image, 0, 0, 550, 400, null);char[][] charMap = chess.getCharMap();
+        boolean inHole = false;
+        for (int i = 0; i < mapConfig.nPlayer; ++i) {
+            if (chess.getSnakes(i).getHeadInHole() >= 0) {
+                inHole = true;
+            }
+        }
+        inHolePanel.setVisible(inHole);
 
         for (int i = 0; i < mapConfig.size; ++i) {
             for (int j = 0; j < mapConfig.size; ++j) {
-                chessArray[i][j].setBackground(new Color(235, 235, 244));
-                chessArray[i][j].setImage(null);
-
+//                chessArray[i][j].setBackground(new Color(235, 235, 244));
+//                chessArray[i][j].setImage(null);
+                chessArray[i][j].setOpaque(false);
             }
         }
         //TODO: use image to replace
@@ -196,7 +213,7 @@ public class GameWindow {
         for (int i = 0; i < mapConfig.nPlayer; ++i) {
             snake = chess.getSnakes(i);
             for (Point p : snake.getAllPoint())
-                if (p.getX() < mapConfig.size) {
+                if (p.getX() < mapConfig.size && p != snake.getHead()) {
                     chessArray[p.getX()][p.getY()].setImage(bodyImage[i]);
 //                    chessArray[p.getX()][p.getY()].setBackground(Color.GREEN);
                 }
@@ -205,8 +222,17 @@ public class GameWindow {
                         headImage[i][snake.headDirection]);
         }
 
+        if (chess.getCollisionsPoint() != null) {
+            for (int i = 0; i < chess.getCollisionsPoint().size(); ++i) {
+                chessArray[chess.getCollisionsPoint().get(i).getX()]
+                        [chess.getCollisionsPoint().get(i).getY()].setImage(
+                        collisionsImage[chess.getCollisionFrames().get(i)]);
+            }
+        }
+
         for (int i = 0; i < mapConfig.size; ++i) {
             for (int j = 0; j < mapConfig.size; ++j) {
+                chessArray[i][j].setBackground(new Color(0, 0, 0, 0));
                 chessArray[i][j].repaint();
             }
         }
@@ -371,16 +397,16 @@ public class GameWindow {
         gbc.fill = GridBagConstraints.BOTH;
         cp.add(tabbedPane1, gbc);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane1.addTab("Game", panel2);
         pauseButton = new JButton();
         pauseButton.setFocusable(false);
         pauseButton.setRequestFocusEnabled(false);
         pauseButton.setText("Pause");
-        panel2.add(pauseButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(pauseButton, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
         scrollPane2.setEnabled(false);
-        panel2.add(scrollPane2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel2.add(scrollPane2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         userTable.setEnabled(false);
         userTable.setFocusable(false);
         scrollPane2.setViewportView(userTable);
@@ -392,6 +418,7 @@ public class GameWindow {
         statusJLabel.setFocusable(false);
         statusJLabel.setText("Running");
         panel2.add(statusJLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(inHolePanel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(70, 70), null, new Dimension(70, 70), 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane1.addTab("Music", panel3);

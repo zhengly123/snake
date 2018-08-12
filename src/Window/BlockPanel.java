@@ -5,10 +5,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class BlockPanel extends JPanel {
 
-    Image image=null;
+//    Image image = null;
+    ArrayList<Image> imageList=new ArrayList<>();
+    boolean refresh=false;
 //    static {
 //        try {
 //            image= ImageIO.read(new File("/home/eric/IdeaProjects/snake/src/head12.png"));
@@ -17,19 +20,35 @@ public class BlockPanel extends JPanel {
 //        }
 //    }
 
-    public void setImage(Image image) {
-        this.image = image;
+
+    public BlockPanel() {
     }
 
-//    public void paint(Graphics g){
-    public void paintComponent(Graphics g){
+    public BlockPanel(boolean refresh) {
+        this.refresh = refresh;
+    }
+
+    public void setImage(Image image) {
+//        this.image = image;
+        imageList.add(image);
+    }
+
+    //    public void paint(Graphics g){
+    public void paintComponent(Graphics g) {
 //        super.paint(g);
         super.paintComponent(g);
         try {
-            g.drawImage(image, 0, 0,getSize().width, getSize().height, null);
+            if (imageList.size() == 0) {
+//                g.drawImage(null, 0, 0, getSize().width, getSize().height, null);
+            } else {
+                for (Image image:imageList)
+                    g.drawImage(image, 0, 0, getSize().width, getSize().height, null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if (refresh)
+            imageList.clear();
     }
 
 }

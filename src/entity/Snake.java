@@ -10,6 +10,10 @@ public class Snake implements Serializable {
     static final int [][]move={{1,0},{0,1},{-1,0},{0,-1}};
     static final Random randomInt = new Random(1015);
 
+    public ArrayList<Point> getBodies() {
+        return bodies;
+    }
+
     private ArrayList<Point> bodies;
     private ArrayList<Point> joints;
     public int headDirection,tailDirection;
