@@ -9,9 +9,10 @@ import java.util.HashMap;
 
 
 public class ServerMessage implements Serializable{
-    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions, hasPause,hasRanking;
+    public boolean hasInit,hasChess,hasStatus,hasMessage,hasRoom,hasCollisions, hasPause,hasRanking,hasEnd;
     MapConfig mapConfig;
     Chess chess;
+    boolean[] playerOnline;
 
     String message,messageFrom;
 
@@ -37,6 +38,9 @@ public class ServerMessage implements Serializable{
         return rankingPoints;
     }
 
+    public boolean[] getPlayerOnline() {
+        return playerOnline;
+    }
 
     public int getRoom() {
         return room;
@@ -74,8 +78,13 @@ public class ServerMessage implements Serializable{
     }
 
     public void setEnd(Result result) {
+        hasEnd=true;
 //        this.collisions = collisions;
         this.result=result;
+    }
+
+    public Result getResult() {
+        return result;
     }
 
     public void print() {
@@ -100,10 +109,11 @@ public class ServerMessage implements Serializable{
         return chess;
     }
 
-    public void setChess(Chess chess,int round) {
+    public void setChess(Chess chess,int round,boolean[] playerOnline) {
         hasChess=true;
         this.chess = chess;
         this.round=round;
+        this.playerOnline=playerOnline;
     }
 
     public static boolean isSerializable(final Object candidateClass)

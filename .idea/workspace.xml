@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="be262fb2-c964-4f2e-8919-ecda79086a1b" name="Default Changelist" comment="khh">
-      <change afterPath="$PROJECT_DIR$/src/Window/RankingWindow.java" afterDir="false" />
+    <list default="true" id="be262fb2-c964-4f2e-8919-ecda79086a1b" name="Default Changelist" comment="kkkkkkkkkkkk">
+      <change afterPath="$PROJECT_DIR$/src/Window/BlockPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Window/ClientLogin.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window/ClientLogin.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window/ClientLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window/ClientLogin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/ClientMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/ClientMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Window/GameWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window/GameWindow.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Window/GameWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window/GameWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/ServerMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/ServerMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entity/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entity/Snake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entity/Snake.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/socket/ClientSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socket/ClientSocket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/socket/ServerPeerSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socket/ServerPeerSocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/socket/ServerGameSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/socket/ServerGameSocket.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,28 +57,28 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="form" value="16" />
-          <entry key="java" value="135" />
+          <entry key="form" value="21" />
+          <entry key="java" value="166" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="GUI_DESIGNER_FORM" value="16" />
-          <entry key="JAVA" value="135" />
+          <entry key="GUI_DESIGNER_FORM" value="21" />
+          <entry key="JAVA" value="166" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="13" />
-          <entry key="java" value="114842" />
-          <entry key="txt" value="3" />
+          <entry key="java" value="126138" />
+          <entry key="txt" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="114842" />
-          <entry key="PLAIN_TEXT" value="16" />
+          <entry key="JAVA" value="126138" />
+          <entry key="PLAIN_TEXT" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.spring.boot.run.usages" />
@@ -88,11 +90,62 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.form">
+          <provider selected="true" editor-type-id="ui-designer" />
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
+        <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="218" column="24" selection-start-line="218" selection-start-column="24" selection-end-line="218" selection-end-column="24" />
+            <state relative-caret-position="-2286">
+              <caret line="72" column="33" selection-start-line="72" selection-start-column="33" selection-end-line="72" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3400#3401#0" expanded="true" />
+                <element signature="e#3456#3457#0" expanded="true" />
+                <element signature="e#3516#4051#0" expanded="true" />
+                <element signature="e#4050#4051#0" expanded="true" />
+                <element signature="e#9403#9404#0" expanded="true" />
+                <element signature="e#9468#9469#0" expanded="true" />
+                <element signature="e#10056#10057#0" expanded="true" />
+                <element signature="e#10115#10116#0" expanded="true" />
+                <element signature="e#11884#11885#0" expanded="true" />
+                <element signature="e#11911#11912#0" expanded="true" />
+                <element signature="e#11918#20935#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Window/BlockPanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#456#457#0" expanded="true" />
+                <element signature="e#490#491#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/App/jdk-9.0.4/lib/src.zip!/java.desktop/javax/swing/JComponent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="309">
+              <caret line="1012" column="16" selection-start-line="1012" selection-start-column="16" selection-end-line="1012" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/socket/ServerGameSocket.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -103,8 +156,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/socket/ServerPeerSocket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="84" column="15" selection-start-line="84" selection-start-column="15" selection-end-line="84" selection-end-column="15" />
+            <state relative-caret-position="319">
+              <caret line="33" column="77" selection-start-line="33" selection-start-column="77" selection-end-line="33" selection-end-column="77" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -113,49 +166,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.form">
-          <provider selected="true" editor-type-id="ui-designer" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/socket/ClientSocket.java">
+        <entry file="file://$PROJECT_DIR$/src/config/ServerMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="89" selection-start-line="89" selection-end-line="89" />
+            <state relative-caret-position="180">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#998#999#0" expanded="true" />
+                <element signature="e#1033#1034#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Window/RankingWindow.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1124#1132#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/App/jdk-9.0.4/lib/src.zip!/java.desktop/javax/swing/JScrollPane.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="434" selection-start-line="434" selection-end-line="434" />
             </state>
           </provider>
         </entry>
@@ -186,23 +205,24 @@
         <option value="$PROJECT_DIR$/src/main/HotkeyDebug.java" />
         <option value="$PROJECT_DIR$/src/socket/ClientGameSocket.java" />
         <option value="$PROJECT_DIR$/src/controller/KeyController.java" />
-        <option value="$PROJECT_DIR$/src/socket/ServerGameSocket.java" />
         <option value="$PROJECT_DIR$/src/moduel/MusicPlayer.java" />
-        <option value="$PROJECT_DIR$/src/entity/Snake.java" />
-        <option value="$PROJECT_DIR$/src/entity/Chess.java" />
-        <option value="$PROJECT_DIR$/src/Window/GameWindow.java" />
         <option value="$PROJECT_DIR$/src/controller/ServerMainController.java" />
-        <option value="$PROJECT_DIR$/src/Window/GameWindow.form" />
         <option value="$PROJECT_DIR$/src/config/MapConfig.java" />
         <option value="$PROJECT_DIR$/src/Window/ClientLogin.form" />
         <option value="$PROJECT_DIR$/src/config/ClientMessage.java" />
         <option value="$PROJECT_DIR$/src/Window/rankingWindow.java" />
+        <option value="$PROJECT_DIR$/src/socket/ServerPeerSocket.java" />
+        <option value="$PROJECT_DIR$/src/Window/RankingWindow.java" />
+        <option value="$PROJECT_DIR$/src/Window/ClientLogin.java" />
+        <option value="$PROJECT_DIR$/src/socket/ServerGameSocket.java" />
         <option value="$PROJECT_DIR$/src/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/config/ServerMessage.java" />
-        <option value="$PROJECT_DIR$/src/socket/ServerPeerSocket.java" />
         <option value="$PROJECT_DIR$/src/socket/ClientSocket.java" />
-        <option value="$PROJECT_DIR$/src/Window/ClientLogin.java" />
-        <option value="$PROJECT_DIR$/src/Window/RankingWindow.java" />
+        <option value="$PROJECT_DIR$/src/entity/Snake.java" />
+        <option value="$PROJECT_DIR$/src/entity/Chess.java" />
+        <option value="$PROJECT_DIR$/src/Window/GameWindow.java" />
+        <option value="$PROJECT_DIR$/src/Window/BlockPanel.java" />
+        <option value="$PROJECT_DIR$/src/Window/GameWindow.form" />
       </list>
     </option>
   </component>
@@ -219,10 +239,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="64" />
-    <option name="y" value="-11" />
-    <option name="width" value="1857" />
-    <option name="height" value="1092" />
+    <option name="x" value="65" />
+    <option name="y" value="-4" />
+    <option name="width" value="1855" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -344,10 +364,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="addUser&#9;PSI&#9;JAVA://controller.GameController#addUser&#10;gensn&#9;PSI&#9;JAVA://entity.Chess#genSnake&#10;Rand&#9;PSI&#9;JAVA://entity.Point#random" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="282" />
+    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="289" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534037633623" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534057056038" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -473,12 +493,12 @@
       <workItem from="1533212678529" duration="15000" />
       <workItem from="1533567712230" duration="2588000" />
       <workItem from="1533742259097" duration="68216000" />
-      <workItem from="1534035234666" duration="2410000" />
+      <workItem from="1534035234666" duration="19403000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130550000" />
+    <option name="totallyTimeSpent" value="147543000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -493,7 +513,7 @@
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49895397" visible="true" weight="0.14980653" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49895397" visible="true" weight="0.14980653" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -521,8 +541,8 @@
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Database" order="7" sideWeight="0.49895397" weight="0.30790493" />
       <window_info anchor="right" id="Maven Projects" order="8" sideWeight="0.49841774" weight="0.32946378" />
-      <window_info anchor="right" x="0" y="0" width="413" height="884" id="Documentation" order="9" sideWeight="0.51150626" side_tool="true" visible="true" weight="0.27971256" />
-      <window_info active="true" anchor="right" x="-192" y="381" width="1809" height="699" id="Debug" order="10" sideWeight="0.4884937" visible="true" weight="0.27971256" />
+      <window_info anchor="right" x="0" y="0" width="413" height="884" id="Documentation" order="9" sideWeight="0.5125523" side_tool="true" visible="true" weight="0.27971256" />
+      <window_info anchor="right" x="-192" y="381" width="1809" height="699" id="Debug" order="10" sideWeight="0.4874477" visible="true" weight="0.27971256" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,13 +612,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/config/Result.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/entity/Point.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -634,13 +647,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/HotkeyDebug.form">
       <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Window/StartWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
     </entry>
     <entry file="jar://$USER_HOME$/App/jdk-9.0.4/lib/src.zip!/java.base/java/lang/invoke/MethodHandles.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -754,34 +760,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/entity/Snake.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
-            <element signature="e#625#626#0" expanded="true" />
-            <element signature="e#1110#1111#0" expanded="true" />
-            <element signature="e#1138#1139#0" expanded="true" />
-            <element signature="e#1927#1928#0" expanded="true" />
-            <element signature="e#1963#1964#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/KeyController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="28" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#266#267#0" expanded="true" />
-            <element signature="e#314#315#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/moduel/MusicPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="746">
@@ -789,38 +767,6 @@
           <folding>
             <element signature="e#2696#2697#0" expanded="true" />
             <element signature="e#2723#2724#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/entity/Chess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
-          <folding>
-            <element signature="class#Status#0" />
-            <element signature="e#826#827#0" expanded="true" />
-            <element signature="e#854#855#0" expanded="true" />
-            <element signature="e#886#887#0" expanded="true" />
-            <element signature="e#915#916#0" expanded="true" />
-            <element signature="method#genWalls#0;class#Chess#0" />
-            <element signature="method#genHoles#0;class#Chess#0" />
-            <element signature="method#genEggs#0;class#Chess#0" />
-            <element signature="method#genLegalPoint#0;class#Chess#0" />
-            <element signature="docComment;method#initSnake#0;class#Chess#0" />
-            <element signature="method#initSnake#0;class#Chess#0" />
-            <element signature="docComment;method#genSnake#1;class#Chess#0" />
-            <element signature="method#genSnake#1;class#Chess#0" />
-            <element signature="docComment;method#pointConflict#0;class#Chess#0" />
-            <element signature="method#pointConflict#0;class#Chess#0" />
-            <element signature="method#pointConflictStatus#0;class#Chess#0" />
-            <element signature="method#getStatusChess#0;class#Chess#0" />
-            <element signature="method#getCharMap#0;class#Chess#0" />
-            <element signature="method#eatEgg#0;class#Chess#0" />
-            <element signature="method#snakeMove#0;class#Chess#0" />
-            <element signature="method#checkHeadConfilct#0;class#Chess#0" />
-            <element signature="method#checkLose#0;class#Chess#0" />
-            <element signature="method#updateEgg#0;class#Chess#0" />
           </folding>
         </state>
       </provider>
@@ -835,9 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.form">
-      <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/config/MapConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -851,36 +794,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Window/rankingWindow.form" />
     <entry file="file://$PROJECT_DIR$/src/Window/rankingWindow.java" />
-    <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2592">
-          <caret line="164" selection-start-line="164" selection-end-line="164" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/config/ServerMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="32" column="8" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="8" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/socket/ServerGameSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="33" column="46" selection-start-line="33" selection-start-column="46" selection-end-line="33" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/config/ClientMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -892,29 +805,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="218" column="24" selection-start-line="218" selection-start-column="24" selection-end-line="218" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.form">
-      <provider selected="true" editor-type-id="ui-designer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/socket/ClientSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/App/jdk-9.0.4/lib/src.zip!/java.desktop/javax/swing/JScrollPane.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -922,13 +812,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/socket/ServerPeerSocket.java">
+    <entry file="file://$PROJECT_DIR$/src/config/Result.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="84" column="15" selection-start-line="84" selection-start-column="15" selection-end-line="84" selection-end-column="15" />
+        <state relative-caret-position="36">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="69" column="12" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+          <folding>
+            <element signature="e#3083#3290#0" expanded="true" />
+            <element signature="e#3289#3290#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="285" lean-forward="true" selection-start-line="285" selection-end-line="285" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#10007#10008#0" expanded="true" />
+            <element signature="e#10046#10047#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/socket/ClientSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2222">
+          <caret line="161" column="58" lean-forward="true" selection-start-line="161" selection-start-column="58" selection-end-line="161" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6307#6308#0" expanded="true" />
+            <element signature="e#6356#6357#0" expanded="true" />
+            <element signature="e#8182#8361#0" expanded="true" />
+            <element signature="e#8360#8361#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/StartWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
@@ -938,17 +869,139 @@
           <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1124#1132#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.java">
+    <entry file="file://$PROJECT_DIR$/src/entity/Chess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
+        <state relative-caret-position="594">
+          <caret line="269" column="16" selection-start-line="269" selection-start-column="16" selection-end-line="269" selection-end-column="16" />
+          <folding>
+            <element signature="class#Status#0" />
+            <element signature="e#826#827#0" expanded="true" />
+            <element signature="e#854#855#0" expanded="true" />
+            <element signature="e#886#887#0" expanded="true" />
+            <element signature="e#915#916#0" expanded="true" />
+            <element signature="method#genWalls#0;class#Chess#0" />
+            <element signature="method#genHoles#0;class#Chess#0" />
+            <element signature="method#genEggs#0;class#Chess#0" />
+            <element signature="method#genLegalPoint#0;class#Chess#0" />
+            <element signature="docComment;method#initSnake#0;class#Chess#0" />
+            <element signature="docComment;method#genSnake#1;class#Chess#0" />
+            <element signature="docComment;method#pointConflict#0;class#Chess#0" />
+            <element signature="method#pointConflict#0;class#Chess#0" />
+            <element signature="method#pointConflictStatus#0;class#Chess#0" />
+            <element signature="method#getStatusChess#0;class#Chess#0" />
+            <element signature="method#getCharMap#0;class#Chess#0" />
+            <element signature="method#eatEgg#0;class#Chess#0" />
+            <element signature="method#printMap#0;class#Chess#0" />
+            <element signature="method#snakeMove#0;class#Chess#0" />
+            <element signature="method#checkHeadConfilct#0;class#Chess#0" />
+            <element signature="method#updateEgg#0;class#Chess#0" />
+          </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/entity/Snake.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/KeyController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#266#267#0" expanded="true" />
+            <element signature="e#314#315#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/ClientLogin.form">
+      <provider selected="true" editor-type-id="ui-designer" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/ServerMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#998#999#0" expanded="true" />
+            <element signature="e#1033#1034#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/socket/ServerPeerSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="33" column="77" selection-start-line="33" selection-start-column="77" selection-end-line="33" selection-end-column="77" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/socket/ServerGameSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/App/jdk-9.0.4/lib/src.zip!/java.desktop/javax/swing/JComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="1012" column="16" selection-start-line="1012" selection-start-column="16" selection-end-line="1012" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2286">
+          <caret line="72" column="33" selection-start-line="72" selection-start-column="33" selection-end-line="72" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3400#3401#0" expanded="true" />
+            <element signature="e#3456#3457#0" expanded="true" />
+            <element signature="e#3516#4051#0" expanded="true" />
+            <element signature="e#4050#4051#0" expanded="true" />
+            <element signature="e#9403#9404#0" expanded="true" />
+            <element signature="e#9468#9469#0" expanded="true" />
+            <element signature="e#10056#10057#0" expanded="true" />
+            <element signature="e#10115#10116#0" expanded="true" />
+            <element signature="e#11884#11885#0" expanded="true" />
+            <element signature="e#11911#11912#0" expanded="true" />
+            <element signature="e#11918#20935#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/BlockPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#456#457#0" expanded="true" />
+            <element signature="e#490#491#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Window/GameWindow.form">
+      <provider selected="true" editor-type-id="ui-designer" />
     </entry>
   </component>
   <component name="masterDetails">

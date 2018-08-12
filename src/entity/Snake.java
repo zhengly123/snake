@@ -57,6 +57,26 @@ public class Snake implements Serializable {
         return false;
     }
 
+    public Snake(Point head, Chess chess,int holeNum) {
+        int direction=3;
+        bodies=new ArrayList<>();
+        bodies.add(head);
+        Point last=head;
+        for (int j=0;j<2-1;++j)
+        {
+            last=new Point(last.getX()+move[direction][0],last.getY()+move[direction][1]);
+            bodies.add(last);
+        }
+
+        headDirection=tailDirection=(direction+2)%4;
+        joints=new ArrayList<>();
+//        this.len=len;
+        headStatus=HeadStatus.InHole;
+        inHole =true;
+        this.headInHole=holeNum;
+        this.chess=chess;
+    }
+
     public Snake(int len, int mapSize, Point head, Chess chess) {
         int direction=randomInt.nextInt(4);
         bodies=new ArrayList<>();

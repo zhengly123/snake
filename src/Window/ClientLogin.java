@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -74,6 +76,16 @@ public class ClientLogin {
                 logger.info("Recved ranking msg");
                 RankingWindow rankingWindow = new RankingWindow(serverMessage.getRankingNames(),
                         serverMessage.getRankingPoints());
+            }
+        });
+        //Name cannot have space
+        aliceTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (!Character.isAlphabetic(e.getKeyChar()) && !Character.isDigit(e.getKeyChar())) {
+                    logger.info("key pressed in textfield");
+                    e.consume();
+                }
             }
         });
     }

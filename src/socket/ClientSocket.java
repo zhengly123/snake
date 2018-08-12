@@ -9,6 +9,8 @@ import controller.ServerMainController;
 
 import javax.swing.*;
 import java.awt.color.CMMException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,6 +33,7 @@ public class ClientSocket implements Runnable{
     private int clientStatus;
     String[] usernames;
     int room;
+    volatile boolean gameStopped=false;
 
 
     public ClientSocket(ClientLogin loginWindow) {
@@ -143,6 +146,8 @@ public class ClientSocket implements Runnable{
         }
         while (true) {
             try {
+                if (gameStopped)
+                    break;
                 Object object2 = ois.readObject();
                 ServerMessage serverMessage=(ServerMessage)object2;
 //                ois.reset();
@@ -150,7 +155,7 @@ public class ClientSocket implements Runnable{
                 serverMessage.print();
                 if (serverMessage.hasChess) {
                     gameWindow.paintChess(serverMessage.getChess());
-                    gameWindow.updateUserList(serverMessage.getChess());
+                    gameWindow.updateUserList(serverMessage.getChess(),serverMessage.getPlayerOnline());
                     gameWindow.setStatusText("Running");
                     System.out.printf("-------Round %d-------",serverMessage.round);
                     serverMessage.getChess().printMap();
@@ -165,12 +170,42 @@ public class ClientSocket implements Runnable{
                     gameWindow.addChatMessage(serverMessage.getMessageFrom(),
                             serverMessage.getMessage());
                 }
+
+                if (serverMessage.hasEnd) {
+                    endGame(serverMessage);
+                    break;
+
+                }
                 //TODO:处理其余的消息
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+        logger.warning("ClientSocket finished");
+    }
+
+    private void endGame(ServerMessage serverMessage) {
+        gameWindow.setItemEnabled(false);
+        switch (serverMessage.getResult()) {
+            case WIN:
+                JOptionPane.showMessageDialog(null,"You are winner!");
+                break;
+            case TIE:
+                JOptionPane.showMessageDialog(null,"It's a tie!");
+                break;
+            case LOSE:
+                JOptionPane.showMessageDialog(null,"You lose it!");
+                break;
+        }
+
+        try {
+            oos.close();
+            ois.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -199,6 +234,13 @@ public class ClientSocket implements Runnable{
 //        frame.setResizable(false);
         frame.setVisible(true);
         frame.requestFocus();
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                gameStopped=true;
+            }
+        });
     }
 
 

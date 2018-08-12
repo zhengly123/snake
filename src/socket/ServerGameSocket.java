@@ -35,6 +35,8 @@ public class ServerGameSocket implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                gameController.playerOffline(playerIndex);
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

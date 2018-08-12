@@ -62,7 +62,7 @@ public class Chess implements Serializable {
         lives=new int[mapConfig.nPlayer];
         points=new int[mapConfig.nPlayer];
         for (int i = 0; i < mapConfig.nPlayer; ++i) {
-            lives[i]=mapConfig.getnLives()-1;
+            lives[i]=mapConfig.getnLives();
         }
         genWalls();
         genHoles();
@@ -259,6 +259,22 @@ public class Chess implements Serializable {
         eggs.remove(i);
     }
 
+    public void genSnakeFromHoles(int index) {
+        Snake snake;
+        boolean success=false;
+        for (int i = 0; i < mapConfig.getnHoles(); ++i) {
+            snake=new Snake(new Point(i,1),this,i);
+            snakes.set(index, snake);
+            if (!checkHeadConfilct(i)) {
+                success=true;
+//                s//TODO:蛇没有从洞里出来，到底是从哪里生成的？？
+                break;
+            }
+        }
+        if (!success) {
+            snakes.set(index, genSnake(mapConfig.getSnakeInitLen()));
+        }
+    }
 
     public void printMap() {
         char[][] chess= getCharMap();
@@ -355,7 +371,8 @@ public class Chess implements Serializable {
                 continue;
             lives[i]--;
             if (lose[i] && lives[i] > 0) {
-                snakes.set(i, genSnake(mapConfig.getSnakeInitLen()));
+                genSnakeFromHoles(i);
+//                snakes.set(i, genSnake(mapConfig.getSnakeInitLen()));
                 lose[i] = false;
             }
         }
@@ -391,7 +408,6 @@ public class Chess implements Serializable {
         }
         if (nLose>0)
             return lose;
-        //TODO:Add multiplayer support
 
         updateEgg(eatenEggs);
         return new boolean[getMapConfig().nPlayer];

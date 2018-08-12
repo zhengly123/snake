@@ -44,6 +44,7 @@ public class GameController extends TimerTask {
     private int nAddedPlayer;
     private int round=0, nLosePlayer =0;
     Thread[] gameThread;
+    boolean[] playerOnline;
 
     public MapConfig getMapConfig() {
         return chess.getMapConfig();
@@ -93,6 +94,9 @@ public class GameController extends TimerTask {
         objectOutputStreams = new ObjectOutputStream[nPlayer];
         objectInputStreams = new ObjectInputStream[nPlayer];
         gameThread=new Thread[nPlayer];
+        playerOnline = new boolean[nPlayer];
+        for (int i=0;i<nPlayer;++i)
+            playerOnline[i]=true;
         logger=Logger.getLogger("GameController");
 
         speed=mapConfig.getSpeed();
@@ -110,12 +114,13 @@ public class GameController extends TimerTask {
         ServerMessage serverMessage=new ServerMessage();
 //        serverMessage.setInit();
         serverMessage.setInit(chess.getMapConfig(),userNames);
-        serverMessage.setChess(chess,round);
+        serverMessage.setChess(chess,round,playerOnline);
         for (Integer i=0;i<nPlayer;++i) {
             ObjectOutputStream oos = objectOutputStreams[i];
             try {
                 oos.writeObject(serverMessage);
                 oos.writeObject(serverMessage);
+                oos.reset();
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.info("Failed to Send chess to "+i);
@@ -155,7 +160,7 @@ public class GameController extends TimerTask {
         round++;
         boolean[] lose=chess.move(playerDirection);
         ServerMessage serverMessage=new ServerMessage();
-        serverMessage.setChess(chess,round);
+        serverMessage.setChess(chess,round,playerOnline);
         //TODO: add collisions
         for (int i = 0; i < nPlayer; ++i) {
             if (lose[i]) {
@@ -284,8 +289,11 @@ public class GameController extends TimerTask {
         //TODO: add game end operation
         updateRanking();
         for (int i = 0; i < nPlayer; ++i) {
-            if (loseTime[i]==0||(nLosePlayer==nPlayer&&loseTime[i]==round))
+            if (loseTime[i]==0)
                 serverMessage.setEnd(Result.WIN);
+            else if (nLosePlayer==nPlayer){
+                serverMessage.setEnd(Result.TIE);
+            }
             else
                 serverMessage.setEnd(Result.LOSE);
             try {
@@ -302,6 +310,10 @@ public class GameController extends TimerTask {
         serverMessage.setMessage(userNames[index],msg);
         sendServerMsgToAll(serverMessage);
         logger.info("Sent msg to all");
+    }
+
+    public void playerOffline(int index) {
+        playerOnline[index]=false;
     }
 }
 
