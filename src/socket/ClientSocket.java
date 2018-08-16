@@ -1,16 +1,14 @@
 package socket;
 
-import Window.ClientLogin;
+import Window.LoginWindow;
 import Window.GameWindow;
 import Window.RankingWindow;
 import config.ClientMessage;
 import config.MapConfig;
 import config.ServerMessage;
 import controller.KeyController;
-import controller.ServerMainController;
 
 import javax.swing.*;
-import java.awt.color.CMMException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedInputStream;
@@ -27,7 +25,7 @@ public class ClientSocket implements Runnable{
     private Socket socket=null;
     private ObjectOutputStream oos=null;
     private ObjectInputStream ois=null;
-    private ClientLogin loginWindow;
+    private LoginWindow loginWindow;
     private GameWindow gameWindow;
     /**
      * 0 is NotConnected, 1 is connected, 2 is ready, 3 is playing
@@ -38,7 +36,7 @@ public class ClientSocket implements Runnable{
     volatile boolean gameStopped=false;
 
 
-    public ClientSocket(ClientLogin loginWindow) {
+    public ClientSocket(LoginWindow loginWindow) {
         this.loginWindow = loginWindow;
         clientStatus=0;
     }
@@ -62,6 +60,12 @@ public class ClientSocket implements Runnable{
         loginWindow.changeButtonStatus(clientStatus);
     }
 
+    /**
+     *
+     * @param username 不含有空格的username，这在输入中应该保证。
+     * @param mapConfig
+     * @param gameSpeed
+     */
     public void createNewRoom(String username, MapConfig mapConfig,int gameSpeed) {
         ClientMessage clientMessage=new ClientMessage();
         clientMessage.setNewGame(username,mapConfig,gameSpeed);
@@ -85,6 +89,10 @@ public class ClientSocket implements Runnable{
         }
     }
 
+    /**
+     * 生成龙虎榜的信息，并返回
+     * @return
+     */
     public ServerMessage getRanking() {
         ClientMessage clientMessage = new ClientMessage();
         clientMessage.setRankingAsk();
@@ -183,13 +191,17 @@ public class ClientSocket implements Runnable{
                 }
                 //TODO:处理其余的消息
             } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Cannot connect to server." +
+                        " Close the program to stop retrying");
                 e.printStackTrace();
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         logger.warning("ClientSocket finished");
     }
+
 
     private void endGame(ServerMessage serverMessage) {
         gameWindow.setItemEnabled(false);

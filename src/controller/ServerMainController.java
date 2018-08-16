@@ -1,6 +1,6 @@
 package controller;
 
-import Window.ClientLogin;
+import Window.LoginWindow;
 import config.MapConfig;
 import socket.ServerPeerSocket;
 
@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class ServerMainController extends Thread{
@@ -20,12 +19,12 @@ public class ServerMainController extends Thread{
     HashMap<Integer,GameController> gameControllerHashMap=new HashMap<>();
     private Logger logger;
 
-    public ServerMainController(ClientLogin loginWindow) {
+    public ServerMainController(LoginWindow loginWindow) {
         this.logginWindow = loginWindow;
         logger=Logger.getLogger("ServerMain");
     }
 
-    private ClientLogin logginWindow;
+    private LoginWindow logginWindow;
 
     public HashMap<Integer, GameController> getGameControllerHashMap() {
         return gameControllerHashMap;

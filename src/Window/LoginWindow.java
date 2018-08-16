@@ -11,15 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.logging.Logger;
 
-public class ClientLogin {
+public class LoginWindow {
     public JPanel cp;
     private JButton startServerButton;
     private JButton connectToServerButton;
@@ -41,21 +35,21 @@ public class ClientLogin {
     ClientSocket clientSocket;
     ServerMainController serverMainController;
 
-    public ClientLogin() {
+    public LoginWindow() {
         $$$setupUI$$$();
         connectToServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO: connect to the server
-                clientSocket = new ClientSocket(ClientLogin.this);
+                clientSocket = new ClientSocket(LoginWindow.this);
                 clientSocket.connect(a127001TextField.getText(), Integer.parseInt(a8123TextField.getText()));
             }
         });
         startServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                serverMainController = new ServerMainController(ClientLogin.this);
-                ClientLogin.this.changeButtonStatus(3);
+                serverMainController = new ServerMainController(LoginWindow.this);
+                LoginWindow.this.changeButtonStatus(3);
                 serverMainController.start();
             }
         });

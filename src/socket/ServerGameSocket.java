@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+/**
+ * 服务器在游戏进行的过程中，为每个玩家创建一个socket进行通讯。
+ */
 public class ServerGameSocket implements Runnable {
     ObjectInputStream ois;
     GameController gameController;
@@ -19,6 +22,9 @@ public class ServerGameSocket implements Runnable {
         this.playerIndex = playerIndex;
     }
 
+    /**
+     * 阻塞等待新的数据，并选择对应函数进行处理
+     */
     @Override
     public void run() {
         while (true) {

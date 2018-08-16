@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+/**
+ * 服务器在游戏开始前的设置、准备阶段，进行通讯。进入房间后，则释放。
+ */
 public class ServerPeerSocket implements Runnable{
     Socket socket;
     int room;

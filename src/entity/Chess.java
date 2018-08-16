@@ -9,6 +9,10 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 enum Status {EMPTY,EGG,HOLE,SNAKE,WALL,INVALID,SNAKETAIL,INHOLE};
+
+/**
+ * 地图的所有数据类，可以还原整个游戏。
+ */
 public class Chess implements Serializable {
     static final int maxTryTimeInGen=1000;
 
@@ -63,7 +67,6 @@ public class Chess implements Serializable {
     private int[] lives,points;
 //    boolean[] holeStatus;
     private static Logger logger=Logger.getLogger("Chess");
-    //TODO:add loser log
 
     public Chess(MapConfig mapConfig) {
         this.mapConfig = mapConfig;
@@ -238,6 +241,10 @@ public class Chess implements Serializable {
 
     }
 
+    /**
+     * 返回用字符表示的地图。
+     * @return
+     */
     public char[][] getCharMap() {
         char[][] map=new char[mapConfig.size][mapConfig.size];
 //        for (int i=0;i<mapConfig.size;++i)
@@ -318,7 +325,6 @@ public class Chess implements Serializable {
     }
 
     ///-------------------------------------
-
     private Set<Integer> snakeMove(int c, int direction) {
         Snake cSnake=snakes.get(c);
         Point head=cSnake.getHead(),newHead=null;
@@ -417,6 +423,11 @@ public class Chess implements Serializable {
         return lose;
     }
 
+    /**
+     * 将所有的蛇前进一步,并判断有无冲突
+     * @param direction
+     * @return
+     */
     public boolean[] move(int[] direction) {
         //move all snake but not modify chess
         Set<Integer> eatenEggs=new TreeSet<>();
